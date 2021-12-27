@@ -1,38 +1,73 @@
 import SwiftUI
 
 struct MainView: View {
-    @StateObject private var vm = MainViewModel()
+    @Binding var currentPage: ChatPage
+    @State var selectedTab: ChatTab = .chatView
     
     var body: some View {
-        VStack {
-            Text(vm.email)
-                .font(.title2.bold())
-                .padding(.vertical)
-            
-            VStack {
-                if let image = vm.photo {
-                    Image(uiImage: image)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 200, height: 200)
-                        .clipShape(Circle())
-                }
-                else {
-                    Image(systemName: "person.crop.circle.fill")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 200, height: 200)
-                        .foregroundColor(.gray)
+        NavigationView {
+            TabView(selection: $selectedTab) {
+                ChatView()
+                    .tag(ChatTab.chatView)
+                    .tabItem {
+                        VStack {
+                            Image(systemName: "message.fill")
+                            Text("Chats")
+                        }
+                    }
+                
+                ContactsView()
+                    .tag(ChatTab.contactsView)
+                    .tabItem {
+                        VStack {
+                            Image(systemName: "person.2.fill")
+                            Text("Contacts")
+                        }
+                    }
+                
+                PostsView()
+                    .tag(ChatTab.postsView)
+                    .tabItem {
+                        VStack {
+                            Image(systemName: "list.number")
+                            Text("Posts")
+                        }
+                    }
+                
+                SettingsView(currentPage: $currentPage)
+                    .tag(ChatTab.settingsView)
+                    .tabItem {
+                        VStack {
+                            Image(systemName: "gearshape.fill")
+                            Text("Settings")
+                        }
+                    }
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    VStack {
+                        if selectedTab == .settingsView {
+                            Button("Sign Out") {
+                                Global.signOut()
+                                currentPage = .loginView
+                            }
+                        }
+                    }
                 }
             }
-            
-            Spacer()
         }
     }
 }
 
+enum ChatTab {
+    case chatView
+    case contactsView
+    case postsView
+    case settingsView
+}
+
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
-        MainView()
+        MainView(currentPage: .constant(.mainView))
     }
 }

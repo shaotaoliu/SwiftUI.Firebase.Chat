@@ -4,10 +4,10 @@ import Firebase
 @main
 struct FirebaseChatApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(currentPage: Global.isLoggedIn ? .mainView : .loginView)
                 .onAppear {
                     UserDefaults.standard.setValue(false, forKey: "_UIConstraintBasedLayoutLogUnsatisfiable")
                 }

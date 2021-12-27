@@ -1,55 +1,61 @@
 import SwiftUI
-import FirebaseAuth
-import FirebaseStorage
 
-class SignUpViewModel: ObservableObject {
+class SignUpViewModel: ViewModel {
+    @Published var displayName = ""
     @Published var email = ""
     @Published var password = ""
-    @Published var repeatPassword = ""
-    @Published var photo: UIImage?
+    @Published var confirmPassword = ""
+    @Published var photo: UIImage? = nil
     @Published var showImagePicker = false
-    @Published var errors: [String] = []
+    @Published var signUpPassed = false
     
-    func createNewAccount(completion: @escaping (Bool) -> Void) {
-        errors.removeAll()
+    func signUp() {
+        signUpPassed = false
         
-        if email.isEmpty {
-            errors.append("Email cannot be empty")
-        }
-        
-        if password.isEmpty {
-            errors.append("Password cannot be empty")
-        }
-        
-        if password != repeatPassword {
-            errors.append("Passwords do not match")
-        }
-        
-        if !errors.isEmpty {
-            completion(false)
+        if let errorMessage = validate() {
+            self.setMessage(.error, errorMessage)
             return
         }
         
-        Auth.auth().createUser(withEmail: email, password: password) { result, error in
+        self.isLoading = true
+
+        AuthService.shared.signUp(email: email, password: password, displayName: displayName, photo: photo) { error in
+            self.isLoading = false
+            
             if let error = error {
-                self.errors.append(error.localizedDescription)
-                completion(false)
+                self.setMessage(.error, error.localizedDescription)
                 return
             }
             
-            if let photo = self.photo, let user = result?.user {
-                Storage.storage().reference(withPath: user.uid)
-                    .putData(photo.pngData()!, metadata: nil) { _, error in
-                    if let error = error {
-                        self.errors.append(error.localizedDescription)
-                        completion(false)
-                        return
-                    }
-                }
-            }
+            // The user needs to re-login
+            AuthService.shared.signOut()
             
-            completion(true)
-            return
+            self.signUpPassed = true
+            self.setMessage(.info, "A verification email has been sent to your email address. Please follow the instructions to complete your registration.")
         }
+    }
+    
+    private func validate() -> String? {
+        if displayName.isEmpty {
+            return "Please enter dispaly name."
+        }
+        
+        if email.isEmpty {
+            return "Please enter email."
+        }
+
+        if password.isEmpty {
+            return "Please enter password."
+        }
+
+        if password != confirmPassword {
+            return "Confirm password does not match."
+        }
+        
+        if let data = photo?.pngData(), data.count > MAX_PHOTO_SIZE {
+            return "The Image is too large. The size should be less than 5 MB."
+        }
+        
+        return nil
     }
 }

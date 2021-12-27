@@ -1,42 +1,45 @@
-import Foundation
-import FirebaseAuth
+import SwiftUI
 
-class LoginViewModel: ObservableObject {
+class LoginViewModel: ViewModel {
     @Published var email = ""
     @Published var password = ""
-    @Published var showMainView = false
-    @Published var showSignUpView = false
-    @Published var showResetPasswordView = false
-    @Published var errors: [String] = []
     
-    func login(completion: @escaping (Bool) -> Void) {
-        errors.removeAll()
-        
-        if email.isEmpty {
-            errors.append("Email cannot be empty")
-        }
-        
-        if password.isEmpty {
-            errors.append("Password cannot be empty")
-        }
-        
-        if !errors.isEmpty {
-            completion(false)
+    func login(success: (() -> Void)? = nil, failure: (() -> Void)? = nil) {
+        if let errorMessage = validate() {
+            setMessage(.error, errorMessage)
+            failure?()
             return
         }
         
-        Auth.auth().signIn(withEmail: email, password: password) { result, error in
+        isLoading = true
+        
+        AuthService.shared.signIn(email: email, password: password) { error in
+            self.isLoading = false
+            
             if let error = error {
-                self.errors.append(error.localizedDescription)
-                completion(false)
+                self.setMessage(.error, error.localizedDescription)
+                failure?()
                 return
             }
             
             self.email = ""
             self.password = ""
             
-            completion(true)
+            success?()
             return
         }
     }
+    
+    private func validate() -> String? {
+        if email.isEmpty {
+            return "Please enter email."
+        }
+
+        if password.isEmpty {
+            return "Please enter password."
+        }
+
+        return nil
+    }
 }
+

@@ -2,19 +2,37 @@ import SwiftUI
 import FirebaseStorage
 
 struct ContentView: View {
+    @State var currentPage: ChatPage
+    @State var currentEmail: String = ""
+    
     var body: some View {
         VStack {
-            Button("Save") {
-                Storage.storage().reference().child("login").child("apple").child("2021").putData("Hello".data(using: .utf8)!, metadata: nil) { _, error in
-                    
-                }
+            switch currentPage {
+                
+            case .loginView:
+                
+                LoginView(currentPage: $currentPage, currentEmail: $currentEmail)
+                
+            case .signUpView:
+                
+                SignUpView(currentPage: $currentPage, currentEmail: $currentEmail)
+                
+            case .mainView:
+                
+                MainView(currentPage: $currentPage)
             }
         }
     }
 }
 
+enum ChatPage {
+    case loginView
+    case signUpView
+    case mainView
+}
+
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView(currentPage: .loginView)
     }
 }
