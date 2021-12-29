@@ -58,6 +58,10 @@
 		4A969C0A277B9E7200E81F44 /* Date.extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A969C09277B9E7200E81F44 /* Date.extension.swift */; };
 		4A969C0C277BECC200E81F44 /* EditPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A969C0B277BECC200E81F44 /* EditPostView.swift */; };
 		4A969C0E277C246100E81F44 /* EditPostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A969C0D277C246000E81F44 /* EditPostViewModel.swift */; };
+		4A969C10277C355100E81F44 /* MessagesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A969C0F277C355100E81F44 /* MessagesViewModel.swift */; };
+		4A969C12277C395200E81F44 /* MessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A969C11277C395200E81F44 /* MessageModel.swift */; };
+		4A969C14277C435900E81F44 /* MessageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A969C13277C435900E81F44 /* MessageService.swift */; };
+		4A969C17277CD65300E81F44 /* MessageBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A969C16277CD65300E81F44 /* MessageBar.swift */; };
 		4AB41AEB2777231700F01319 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB41AEA2777231700F01319 /* ViewModel.swift */; };
 		4AB41AED277725B500F01319 /* PhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB41AEC277725B500F01319 /* PhotoView.swift */; };
 		4ACFDC69276EBD470039769F /* FirebaseFirestoreSwift-Beta in Frameworks */ = {isa = PBXBuildFile; productRef = 4ACFDC68276EBD470039769F /* FirebaseFirestoreSwift-Beta */; };
@@ -113,6 +117,10 @@
 		4A969C09277B9E7200E81F44 /* Date.extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.extension.swift; sourceTree = "<group>"; };
 		4A969C0B277BECC200E81F44 /* EditPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPostView.swift; sourceTree = "<group>"; };
 		4A969C0D277C246000E81F44 /* EditPostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPostViewModel.swift; sourceTree = "<group>"; };
+		4A969C0F277C355100E81F44 /* MessagesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesViewModel.swift; sourceTree = "<group>"; };
+		4A969C11277C395200E81F44 /* MessageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageModel.swift; sourceTree = "<group>"; };
+		4A969C13277C435900E81F44 /* MessageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageService.swift; sourceTree = "<group>"; };
+		4A969C16277CD65300E81F44 /* MessageBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageBar.swift; sourceTree = "<group>"; };
 		4AB41AEA2777231700F01319 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		4AB41AEC277725B500F01319 /* PhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoView.swift; sourceTree = "<group>"; };
 		4ACFDC5E276EBCC20039769F /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
@@ -139,6 +147,7 @@
 			children = (
 				4A6605CD2777A43D002D11C3 /* AuthService.swift */,
 				4A6605CF2777A44E002D11C3 /* StorageService.swift */,
+				4A969C13277C435900E81F44 /* MessageService.swift */,
 				4A969BE82779739C00E81F44 /* UserService.swift */,
 				4A969C01277AF4A500E81F44 /* PostsService.swift */,
 			);
@@ -149,6 +158,7 @@
 			isa = PBXGroup;
 			children = (
 				4A6605EB27784F5E002D11C3 /* UserModel.swift */,
+				4A969C11277C395200E81F44 /* MessageModel.swift */,
 				4A969C05277AFEB500E81F44 /* ImageSource.swift */,
 				4A969C03277AF61400E81F44 /* PostModel.swift */,
 				4A6605ED27784F96002D11C3 /* ChatError.swift */,
@@ -235,7 +245,7 @@
 				4A969C0B277BECC200E81F44 /* EditPostView.swift */,
 				4A6605E027782A43002D11C3 /* ChatView.swift */,
 				4A6605E2277833A1002D11C3 /* ContactsView.swift */,
-				4A969BF9277ACC4800E81F44 /* MessagesView.swift */,
+				4A969C15277CD5DC00E81F44 /* Messages */,
 				4A6605E427783449002D11C3 /* SettingsView.swift */,
 			);
 			path = Views;
@@ -251,6 +261,7 @@
 				4A969BFD277AF47000E81F44 /* NewPostViewModel.swift */,
 				4A969C0D277C246000E81F44 /* EditPostViewModel.swift */,
 				4A969BFF277AF47800E81F44 /* PostsViewModel.swift */,
+				4A969C0F277C355100E81F44 /* MessagesViewModel.swift */,
 				4A6605EF27785B9B002D11C3 /* SettingsViewModel.swift */,
 				4A6605F127785BB3002D11C3 /* ChatsViewModel.swift */,
 				4A6605F327785BC5002D11C3 /* ContactsViewModel.swift */,
@@ -265,6 +276,15 @@
 				4A75171C27649AEE00E90458 /* MainViewModel.swift */,
 			);
 			path = Temp;
+			sourceTree = "<group>";
+		};
+		4A969C15277CD5DC00E81F44 /* Messages */ = {
+			isa = PBXGroup;
+			children = (
+				4A969BF9277ACC4800E81F44 /* MessagesView.swift */,
+				4A969C16277CD65300E81F44 /* MessageBar.swift */,
+			);
+			path = Messages;
 			sourceTree = "<group>";
 		};
 		4AB41AEE277727FE00F01319 /* Helpers */ = {
@@ -375,6 +395,7 @@
 				4A6605E527783449002D11C3 /* SettingsView.swift in Sources */,
 				4A751708276463F700E90458 /* SignUpView.swift in Sources */,
 				4A969C04277AF61400E81F44 /* PostModel.swift in Sources */,
+				4A969C10277C355100E81F44 /* MessagesViewModel.swift in Sources */,
 				4A969BF6277AC3E800E81F44 /* SettingViewSheets.swift in Sources */,
 				4ACFDC6A276F19200039769F /* Home.swift in Sources */,
 				4A969BEB2779B37800E81F44 /* PostsView.swift in Sources */,
@@ -404,7 +425,9 @@
 				4A66060127786983002D11C3 /* ChangeEmailView.swift in Sources */,
 				4A6605DF27781DCC002D11C3 /* ForgotPasswordView.swift in Sources */,
 				4A6605E92778486C002D11C3 /* LoadingView.swift in Sources */,
+				4A969C17277CD65300E81F44 /* MessageBar.swift in Sources */,
 				4A75171927648BCE00E90458 /* MainView.swift in Sources */,
+				4A969C12277C395200E81F44 /* MessageModel.swift in Sources */,
 				4A6605EE27784F96002D11C3 /* ChatError.swift in Sources */,
 				4A969C0C277BECC200E81F44 /* EditPostView.swift in Sources */,
 				4A6605F027785B9B002D11C3 /* SettingsViewModel.swift in Sources */,
@@ -412,6 +435,7 @@
 				4A75170A27646F9800E90458 /* SignUpViewModel.swift in Sources */,
 				4A6605DA2777DFFD002D11C3 /* LoginViewModel.swift in Sources */,
 				4A969C00277AF47800E81F44 /* PostsViewModel.swift in Sources */,
+				4A969C14277C435900E81F44 /* MessageService.swift in Sources */,
 				4A969BFC277AF21D00E81F44 /* NewPostView.swift in Sources */,
 				4A7516D727642FCE00E90458 /* ContentView.swift in Sources */,
 				4A969C0A277B9E7200E81F44 /* Date.extension.swift in Sources */,

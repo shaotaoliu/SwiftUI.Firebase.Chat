@@ -17,7 +17,7 @@ struct ContactsView: View {
                 
                 List {
                     ForEach(vm.filteredContacts, id: \.id) { contact in
-                        NavigationLink(destination: MessagesView()) {
+                        NavigationLink(destination: MessagesView(chatter: contact)) {
                             HStack {
                                 ZStack {
                                     if let url = contact.photoURL {
