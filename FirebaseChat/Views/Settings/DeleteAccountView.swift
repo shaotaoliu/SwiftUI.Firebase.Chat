@@ -34,7 +34,7 @@ struct DeleteAccountView: View {
             .alert(vm.messageTitle, isPresented: $vm.hasMessage, presenting: vm.messageText, actions: { _ in
                 Button("OK") {
                     if vm.accountHasBeenDeleted {
-                        vm.showDeleteAccountView = false
+                        vm.activeSheet = nil
                     }
                 }
             }, message: { messageText in

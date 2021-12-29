@@ -29,7 +29,7 @@ struct ChangePasswordView: View {
         .alert(vm.messageTitle, isPresented: $vm.hasMessage, presenting: vm.messageText, actions: { _ in
             Button("OK") {
                 if vm.messageType == .info {
-                    vm.showChangePasswordView = false
+                    vm.activeSheet = nil
                 }
             }
         }, message: { messageText in

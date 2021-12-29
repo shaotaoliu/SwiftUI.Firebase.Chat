@@ -5,9 +5,7 @@ import FirebaseFirestoreSwift
 class UserService {
     static let shared = UserService()
     
-    private init() {
-        
-    }
+    private init() {}
     
     private let collection = Firestore.firestore().collection("users")
     
@@ -46,19 +44,42 @@ class UserService {
                 return
             }
             
-            var user: UserModel? = nil
-            
-            if let document = document {
-                do {
-                    user = try document.data(as: UserModel.self)
-                }
-                catch {
-                    completion(nil, error)
-                    return
-                }
+            guard let document = document, document.exists else {
+                completion(nil, ChatError.emailNotExists)
+                return
             }
             
-            completion(user, nil)
+            do {
+                let user = try document.data(as: UserModel.self)
+                completion(user, nil)
+            }
+            catch {
+                completion(nil, error)
+                return
+            }
+        }
+    }
+    
+    func getByEmail(email: String, completion: @escaping (UserModel?, Error?) -> Void) {
+        collection.whereField("email", isEqualTo: email).getDocuments { snapshot, error in
+            if let error = error {
+                completion(nil, error)
+                return
+            }
+            
+            guard let document = snapshot?.documents.first else {
+                completion(nil, ChatError.emailNotExists)
+                return
+            }
+        
+            do {
+                let user = try document.data(as: UserModel.self)
+                completion(user, nil)
+            }
+            catch {
+                completion(nil, error)
+                return
+            }
         }
     }
     

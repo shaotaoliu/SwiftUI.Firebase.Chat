@@ -6,20 +6,17 @@ class SettingsViewModel: ViewModel {
     @Published var showChangePhotoView = false
     @Published var showImagePicker = false
     
+    @Published var activeSheet: SettingViewSheets?
     @Published var displayName: String = ""
     @Published var newDisplayName: String = ""
-    @Published var showChangeDisplayNameView = false
     
     @Published var email: String = ""
     @Published var newEmail: String = ""
-    @Published var showChangeEmailView = false
     
     @Published var currentPassword = ""
     @Published var newPassword = ""
     @Published var confirmNewPassword = ""
-    @Published var showChangePasswordView = false
     
-    @Published var showDeleteAccountView = false
     @Published var confirmDeleteAccount = false
     @Published var accountHasBeenDeleted = false
     
@@ -31,7 +28,7 @@ class SettingsViewModel: ViewModel {
             email = user.email ?? ""
             
             if user.photoURL != nil {
-                StorageService.shared.getUserPhoto(userId: user.uid) { image, error in
+                StorageService.shared.getImage(source: .user, id: user.uid) { image, error in
                     self.photo = image
                 }
             }
@@ -133,7 +130,7 @@ class SettingsViewModel: ViewModel {
             }
             
             self.displayName = self.newDisplayName
-            self.showChangeDisplayNameView = false
+            self.activeSheet = nil
             return
         }
     }

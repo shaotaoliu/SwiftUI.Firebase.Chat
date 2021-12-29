@@ -5,9 +5,7 @@ class AuthService {
     static let shared = AuthService()
     private let auth = Auth.auth()
     
-    private init() {
-        
-    }
+    private init() {}
     
     var currentUser: User? {
         auth.currentUser
@@ -31,13 +29,12 @@ class AuthService {
                 return
             }
             
-            StorageService.shared.storeUserPhoto(userId: user.uid, photo: photo) { url, error in
+            StorageService.shared.storeImage(source: .user, id: user.uid, image: photo) { url, error in
                 if let error = error {
                     completion(error)
                     return
                 }
                 
-                print(url!.absoluteString)
                 self.saveExtraInfo(user: user, displayName: displayName, photoURL: url, completion: completion)
             }
         }
@@ -59,7 +56,6 @@ class AuthService {
                 completion(error)
                 return
             }
-            
             
             UserService.shared.save(user: UserModel(from: user)) { error in
                 if let error = error {
@@ -113,7 +109,7 @@ class AuthService {
             return
         }
         
-        StorageService.shared.storeUserPhoto(userId: user.uid, photo: photo) { url, error in
+        StorageService.shared.storeImage(source: .user, id: user.uid, image: photo) { url, error in
             if let error = error {
                 completion(error)
                 return
@@ -203,7 +199,7 @@ class AuthService {
             return
         }
         
-        StorageService.shared.deleteUserPhoto(userId: user.uid) { error in
+        StorageService.shared.deleteImage(source: .user, id: user.uid) { error in
             if let error = error {
                 completion(error)
                 return

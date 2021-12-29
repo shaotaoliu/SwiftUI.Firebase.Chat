@@ -5,9 +5,20 @@ struct SettingsView: View {
     @Binding var currentPage: ChatPage
     
     var body: some View {
-        VStack(spacing: 10) {
+        VStack(spacing: 0) {
+            HStack {
+                Spacer()
+                
+                Button("Sign Out") {
+                    Global.signOut()
+                    currentPage = .loginView
+                }
+            }
+            .padding(.trailing)
+            
             Text("Settings")
                 .font(.title2.bold())
+                .padding(.bottom, 10)
             
             NavigationLink(isActive: $vm.showChangePhotoView, destination: {
                 ChangePhotoView(vm: vm)
@@ -18,6 +29,7 @@ struct SettingsView: View {
                         vm.showChangePhotoView = true
                     }
             })
+                .padding(.bottom, 10)
             
             VStack(spacing: 20) {
                 VStack(alignment: .leading, spacing: 10) {
@@ -28,10 +40,7 @@ struct SettingsView: View {
                     ChatEditText(vm.displayName)
                 }
                 .onTapGesture {
-                    vm.showChangeDisplayNameView = true
-                }
-                .sheet(isPresented: $vm.showChangeDisplayNameView) {
-                    ChangeDisplayNameView(vm: vm)
+                    vm.activeSheet = .displayName
                 }
                 
                 VStack(alignment: .leading, spacing: 10) {
@@ -42,28 +51,37 @@ struct SettingsView: View {
                     ChatEditText(vm.email)
                 }
                 .onTapGesture {
-                    vm.showChangeEmailView = true
-                }
-                .sheet(isPresented: $vm.showChangeEmailView) {
-                    ChangeEmailView(vm: vm)
+                    vm.activeSheet = .email
                 }
                 
                 Button("Change Password".uppercased()) {
-                    vm.showChangePasswordView = true
+                    vm.activeSheet = .password
                 }
                 .padding()
-                .sheet(isPresented: $vm.showChangePasswordView) {
-                    ChangePasswordView(vm: vm)
-                }
                 
                 Spacer()
                 
                 Button("Delete Account".uppercased()) {
-                    vm.showDeleteAccountView = true
+                    vm.activeSheet = .delete
                 }
                 .foregroundColor(.red)
                 .padding()
-                .sheet(isPresented: $vm.showDeleteAccountView) {
+            }
+            .padding()
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color.gray.opacity(0.15))
+            .sheet(item: $vm.activeSheet) { activeSheet in
+                switch activeSheet {
+                case .displayName:
+                    ChangeDisplayNameView(vm: vm)
+                    
+                case .email:
+                    ChangeEmailView(vm: vm)
+                    
+                case .password:
+                    ChangePasswordView(vm: vm)
+                    
+                case .delete:
                     DeleteAccountView(vm: vm)
                         .onDisappear {
                             if vm.accountHasBeenDeleted {
@@ -72,11 +90,7 @@ struct SettingsView: View {
                         }
                 }
             }
-            .padding()
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color.gray.opacity(0.15))
         }
-        .navigationBarTitleDisplayMode(.inline)
     }
 }
 

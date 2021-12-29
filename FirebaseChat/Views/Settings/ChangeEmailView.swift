@@ -23,7 +23,7 @@ struct ChangeEmailView: View {
         .alert(vm.messageTitle, isPresented: $vm.hasMessage, presenting: vm.messageText, actions: { _ in
             Button("OK") {
                 if vm.messageType == .info {
-                    vm.showChangeEmailView = false
+                    vm.activeSheet = nil
                 }
             }
         }, message: { messageText in

@@ -6,48 +6,56 @@ struct ContactsView: View {
     private let imageWidth: CGFloat = 50
     
     var body: some View {
-        VStack(spacing: 10) {
-            Text("Contacts")
-                .font(.title2.bold())
-            
-            List {
-                ForEach(vm.contacts, id: \.id) { contact in
-                    HStack {
-                        ZStack {
-                            if let url = contact.photoURL {
-                                WebImage(url: URL(string: url)!)
-                                    .resizable()
-                                    .placeholder {
-                                        Image(systemName: "hourglass")
+        NavigationView {
+            VStack(spacing: 10) {
+                Text("Contacts")
+                    .font(.title2.bold())
+                    .padding(.top, 20)
+                
+                SearchBar(text: $vm.searchText, placeholder: "Search")
+                    .padding(.horizontal)
+                
+                List {
+                    ForEach(vm.filteredContacts, id: \.id) { contact in
+                        NavigationLink(destination: MessagesView()) {
+                            HStack {
+                                ZStack {
+                                    if let url = contact.photoURL {
+                                        WebImage(url: URL(string: url)!)
+                                            .resizable()
+                                            .placeholder {
+                                                Image(systemName: "hourglass")
+                                            }
+                                            .scaledToFill()
+                                            .frame(width: imageWidth, height: imageWidth)
+                                            .clipShape(Circle())
                                     }
-                                    .scaledToFill()
-                                    .frame(width: imageWidth, height: imageWidth)
-                                    .clipShape(Circle())
-                            }
-                            else {
-                                Image(systemName: "person.crop.circle.fill")
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: imageWidth, height: imageWidth)
-                                    .foregroundColor(.gray)
+                                    else {
+                                        Image(systemName: "person.crop.circle.fill")
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: imageWidth, height: imageWidth)
+                                            .foregroundColor(.gray)
+                                    }
+                                }
+                                .padding(.vertical, 5)
+                                
+                                Text(contact.displayName)
                             }
                         }
-                        .padding(.vertical, 5)
-                        
-                        Text(contact.displayName)
                     }
                 }
+                .listStyle(.plain)
             }
-            .listStyle(.plain)
-        }
-        .navigationBarTitleDisplayMode(.inline)
-        .overlay(
-            ZStack {
-                if vm.isLoading {
-                    LoadingView()
+            .navigationBarHidden(true)
+            .overlay(
+                ZStack {
+                    if vm.isLoading {
+                        LoadingView()
+                    }
                 }
-            }
-        )
+            )
+        }
     }
 }
 

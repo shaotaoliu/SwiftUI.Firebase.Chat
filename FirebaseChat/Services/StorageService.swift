@@ -3,17 +3,14 @@ import FirebaseStorage
 
 class StorageService {
     static let shared = StorageService()
-    private let photoRef = Storage.storage().reference().child("photos")
-    private let imageRef = Storage.storage().reference().child("images")
+    private let reference = Storage.storage().reference()
     
-    private init() {
-        
-    }
+    private init() {}
     
-    func storeUserPhoto(userId: String, photo: UIImage, completion: @escaping (URL?, Error?) -> Void) {
-        let ref = photoRef.child(userId)
+    func storeImage(source: ImageSource, id: String, image: UIImage, completion: @escaping (URL?, Error?) -> Void) {
+        let ref = reference.child(source.rawValue).child(id)
         
-        ref.putData(photo.pngData()!, metadata: nil) { metadata, error in
+        ref.putData(image.pngData()!, metadata: nil) { metadata, error in
             if let error = error {
                 completion(nil, error)
                 return
@@ -30,8 +27,8 @@ class StorageService {
         }
     }
     
-    func getUserPhoto(userId: String, completion: @escaping (UIImage?, Error?) -> Void) {
-        let ref = photoRef.child(userId)
+    func getImage(source: ImageSource, id: String, completion: @escaping (UIImage?, Error?) -> Void) {
+        let ref = reference.child(source.rawValue).child(id)
         
         ref.getData(maxSize: MAX_PHOTO_SIZE) { data, error in
             if let error = error {
@@ -44,14 +41,10 @@ class StorageService {
         }
     }
     
-    func deleteUserPhoto(userId: String, completion: @escaping (Error?) -> Void) {
-        photoRef.child(userId).delete { error in
-            completion(error)
-        }
-    }
-    
-    func updateUserPhoto(userId: String, photo: UIImage, completion: @escaping (Error?) -> Void) {
-        photoRef.child(userId).putData(photo.pngData()!, metadata: nil) { metadata, error in
+    func deleteImage(source: ImageSource, id: String, completion: @escaping (Error?) -> Void) {
+        let ref = reference.child(source.rawValue).child(id)
+        
+        ref.delete { error in
             completion(error)
         }
     }
