@@ -1,10 +1,11 @@
 import SwiftUI
 
 class MessagesViewModel: ViewModel {
-    @Published var messages: [ChatMessage] = []
+    @Published var messages: [MessageModel] = []
     @Published var textToSend: String = ""
     @Published var imageToSend: UIImage?
     @Published var showImagePicker = false
+    @Published var latestMessageId: String? = nil
     
     func sendMessage(toId: String) {
         if textToSend.isEmpty && imageToSend == nil {
@@ -24,49 +25,30 @@ class MessagesViewModel: ViewModel {
             self.imageToSend = nil
         }
     }
+    
+    func getMessages(toId: String) {
+        let fromId = AuthService.shared.currentUser!.uid
+        
+        MessageService.shared.getMessages(fromId: fromId, toId: toId) { messages, error in
+            if let error = error {
+                self.setMessage(.error, error.localizedDescription)
+                return
+            }
+            
+            if let result = messages {
+                self.messages = result
+                self.latestMessageId = result.last?.id
+            }
+        }
+    }
+    
+    func markRecentMessageAsRead(toId: String) {
+        let fromId = AuthService.shared.currentUser!.uid
+        
+        MessageService.shared.markRecentMessageAsRead(fromId: fromId, toId: toId) { error in
+            if let error = error {
+                print(error.localizedDescription)
+            }
+        }
+    }
 }
-
-/*
- 
- struct MessageModel: Codable {
-     @DocumentID var id: String?
-     var text: String
-     var isImage: Bool
-     var fromMe: Bool
-     var sentTime: Date
- }
-
- struct ChatMessage {
-     var id: String
-     var text: String
-     var isImage: Bool
-     var fromMe: Bool
-     var sentTime: Date
- }
-
- struct ChatNewMessage {
-     var fromId: String
-     var toId: String
-     var text: String?
-     var Image: UIImage?
- }
-
- struct RecentMessageModel: Codable {
-     @DocumentID var id: String?
-     var text: String
-     var sentTime: Date
-     var alreadyRead: Bool
- }
-
- struct RecentMessage {
-     let text: String
-     var sentTime: Date
-     let alreadyRead: Bool
-     let recipient: MessageRecipient
- }
-
- struct MessageRecipient {
-     let displayName: String
-     let photoURL: String?
- }
- */

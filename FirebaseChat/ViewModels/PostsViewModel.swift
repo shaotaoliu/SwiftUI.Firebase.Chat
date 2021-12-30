@@ -2,7 +2,6 @@ import SwiftUI
 
 class PostsViewModel: ViewModel {
     @Published var posts: [PostViewModel] = []
-    @Published var showNewPostView = false
     
     override init() {
         super.init()
@@ -39,7 +38,7 @@ class PostsViewModel: ViewModel {
                             userPhotoURL: user?.photoURL ?? "",
                             text: model.text,
                             imageURL: model.imageURL,
-                            postedDt: model.postedDt.longString(today: true)))
+                            postedDt: model.postedDt))
                         
                         count += 1
                         if count == models.count {
@@ -64,10 +63,6 @@ class PostsViewModel: ViewModel {
             }
         }
     }
-    
-    func editPost(post: PostViewModel) {
-        
-    }
 }
 
 struct PostViewModel {
@@ -77,6 +72,6 @@ struct PostViewModel {
     var userPhotoURL: String?
     var text: String
     var imageURL: String?
-    var postedDt: String
+    var postedDt: Date
 }
 

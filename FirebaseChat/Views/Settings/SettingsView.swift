@@ -6,20 +6,6 @@ struct SettingsView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            HStack {
-                Spacer()
-                
-                Button("Sign Out") {
-                    Global.signOut()
-                    currentPage = .loginView
-                }
-            }
-            .padding(.trailing)
-            
-            Text("Settings")
-                .font(.title2.bold())
-                .padding(.bottom, 10)
-            
             NavigationLink(isActive: $vm.showChangePhotoView, destination: {
                 ChangePhotoView(vm: vm)
             }, label: {

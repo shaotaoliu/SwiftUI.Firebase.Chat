@@ -57,7 +57,7 @@ struct PostRowView: View {
             HStack {
                 Spacer(minLength: 0)
                 
-                Text(post.postedDt)
+                Text(post.postedDt.longString(today: true))
                     .font(.caption)
             }
         }
@@ -82,6 +82,6 @@ struct PostRowView_Previews: PreviewProvider {
                         userPhotoURL: nil,
                         text: "Hello",
                         imageURL: nil,
-                        postedDt: Date().longString(today: true)))
+                        postedDt: Date()))
     }
 }

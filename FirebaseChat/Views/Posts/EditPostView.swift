@@ -85,6 +85,6 @@ struct EditPostView: View {
 struct EditPostView_Previews: PreviewProvider {
     static var previews: some View {
         EditPostView(post: PostViewModel(id: "123", userId: "123", userName: "Kevin",
-                                         text: "Hello", postedDt: Date().longString()))
+                                         text: "Hello", postedDt: Date()))
     }
 }

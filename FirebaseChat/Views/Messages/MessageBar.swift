@@ -5,45 +5,60 @@ struct MessageBar: View {
     let chatter: UserModel
     
     var body: some View {
-        HStack {
-            Button(action: {
-                vm.textToSend = ""
-                vm.showImagePicker = true
-            }, label: {
-                if let image = vm.imageToSend {
-                    Image(uiImage: image)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 30, height: 25)
-                        .cornerRadius(3)
-                }
-                else {
+        VStack(spacing: 15) {
+            HStack {
+                Button(action: {
+                    vm.showImagePicker = true
+                }, label: {
                     Image(systemName: "photo.fill")
                         .font(.system(size: 28))
                         .foregroundColor(.blue)
+                })
+                
+                TextField("Message...", text: $vm.textToSend, onCommit: {
+                    sendMessage()
+                })
+                    .textFieldStyle(.roundedBorder)
+                    .submitLabel(.send)
+                
+                Button(action: {
+                    sendMessage()
+                }, label: {
+                    Image(systemName: "arrow.up.circle.fill")
+                        .font(.system(size: 30))
+                        .foregroundColor(nothingToSend() ? .gray.opacity(0.6) : .blue)
+                })
+                    .disabled(nothingToSend())
+            }
+            
+            if let image = vm.imageToSend {
+                ZStack(alignment: .topTrailing) {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 266, height: 185)
+                        .cornerRadius(10)
+                    
+                    Button(action: {
+                        withAnimation {
+                            vm.imageToSend = nil
+                        }
+                    }, label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.system(size: 20))
+                            .foregroundColor(.white)
+                            .background(Color.blue)
+                            .clipShape(Circle())
+                            .padding(10)
+                    })
                 }
-            })
-            
-            TextField("Message...", text: $vm.textToSend, onCommit: {
-                sendMessage()
-            })
-                .textFieldStyle(.roundedBorder)
-                .submitLabel(.send)
-            
-            Button(action: {
-                sendMessage()
-            }, label: {
-                Image(systemName: "arrow.up.circle.fill")
-                    .font(.system(size: 30))
-                    .foregroundColor(nothingToSend() ? .gray.opacity(0.6) : .blue)
-            })
-                .disabled(nothingToSend())
+            }
         }
         .padding()
         .background(.thinMaterial)
-//        .fullScreenCover(isPresented: $vm.showImagePicker) {
-//            ImagePicker(image: $vm.imageToSend)
-//        }
+        .fullScreenCover(isPresented: $vm.showImagePicker) {
+            ImagePicker(image: $vm.imageToSend)
+        }
     }
     
     func sendMessage() {

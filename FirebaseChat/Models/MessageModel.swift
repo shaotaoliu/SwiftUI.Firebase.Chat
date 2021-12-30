@@ -4,16 +4,8 @@ import FirebaseFirestoreSwift
 
 struct MessageModel: Codable {
     @DocumentID var id: String?
-    var text: String
-    var isImage: Bool
-    var fromMe: Bool
-    var sentTime: Date
-}
-
-struct ChatMessage {
-    var id: String
-    var text: String
-    var isImage: Bool
+    var text: String?
+    var imageURL: String?
     var fromMe: Bool
     var sentTime: Date
 }
@@ -33,6 +25,7 @@ struct RecentMessageModel: Codable {
 }
 
 struct RecentMessage {
+    let id: String
     let text: String
     var sentTime: Date
     let alreadyRead: Bool

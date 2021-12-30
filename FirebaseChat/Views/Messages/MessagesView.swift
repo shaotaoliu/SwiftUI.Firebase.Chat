@@ -9,18 +9,17 @@ struct MessagesView: View {
             GeometryReader { proxy in
                 ScrollView {
                     ScrollViewReader { reader in
-                        Text("Hello")
-//                        MessageView(chat: chat, viewWidth: proxy.size.width)
-//                            .onChange(of: scrollMessageId) { _ in
-//                                if let messageId = scrollMessageId {
-//                                    scrollTo(scrollReader: reader, messageId: messageId, shouldAnimate: true)
-//                                }
-//                            }
-//                            .onAppear {
-//                                if let messageId = chat.messages.last?.id {
-//                                    scrollTo(scrollReader: reader, messageId: messageId, shouldAnimate: false)
-//                                }
-//                            }
+                        MessageSection(vm: vm, chatter: chatter, viewWidth: proxy.size.width)
+                            .onChange(of: vm.latestMessageId) { _ in
+                                if let messageId = vm.latestMessageId {
+                                    scrollTo(proxy: reader, messageId: messageId, shouldAnimate: true)
+                                }
+                            }
+                            .onAppear {
+                                if let messageId = vm.latestMessageId {
+                                    scrollTo(proxy: reader, messageId: messageId, shouldAnimate: false)
+                                }
+                            }
                     }
                 }
             }
@@ -30,6 +29,19 @@ struct MessagesView: View {
         }
         .navigationTitle(chatter.displayName)
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            vm.getMessages(toId: chatter.id!)
+        }
+    }
+    
+    func scrollTo(proxy: ScrollViewProxy, messageId: String, shouldAnimate: Bool) {
+        DispatchQueue.main.async {
+            withAnimation(shouldAnimate ? .easeIn : nil) {
+                proxy.scrollTo(messageId, anchor: .bottom)
+            }
+            
+            vm.markRecentMessageAsRead(toId: chatter.id!)
+        }
     }
 }
 
