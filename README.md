@@ -1,6 +1,6 @@
 # SwiftUI.Firebase.Chat
 
-This is a chat app. There are still a lot word to do:
+This is a chat app. There are still a lot work to do:
 1. Refactor the code.
 2. Do more tests and fix the bugs.
 3. Improve the performance.
